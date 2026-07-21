@@ -60,7 +60,7 @@ class FloatingPanel<Content: View>: NSPanel, NSWindowDelegate {
             self.saveWindowPosition()
         })
     )
-    contentView?.layer?.cornerRadius = Popup.cornerRadius + Popup.horizontalPadding
+    contentView?.layer?.cornerRadius = Popup.panelCornerRadius
   }
 
   func toggle(height: CGFloat, at popupPosition: PopupPosition = Defaults[.popupPosition]) {
@@ -136,6 +136,12 @@ class FloatingPanel<Content: View>: NSPanel, NSWindowDelegate {
     }
 
     var finalFrameSize = frameSize
+
+    // The clipboard column remains fixed. The existing preview slideout may
+    // still add to the total window width using its original behavior.
+    if !preview.state.isOpen {
+      finalFrameSize.width = Popup.contentWidth
+    }
     var minContent = preview.minimumContentWidth
     var minPreview = 0.0
 

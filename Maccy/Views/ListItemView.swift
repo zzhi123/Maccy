@@ -28,6 +28,12 @@ enum SelectionAppearance {
   }
 }
 
+enum ListItemStyle: Equatable {
+  case card
+  case menu
+  case plain
+}
+
 struct ListItemView<Title: View, ID: Hashable>: View {
   var id: ID
   var selectionId: UUID
@@ -40,26 +46,40 @@ struct ListItemView<Title: View, ID: Hashable>: View {
   var selectionIndex: Int?
   var help: LocalizedStringKey?
   var selectionAppearance: SelectionAppearance = .none
+  var style: ListItemStyle = .plain
   @ViewBuilder var title: () -> Title
 
   @Default(.showApplicationIcons) private var showIcons
   @Environment(AppState.self) private var appState
   @Environment(ModifierFlags.self) private var modifierFlags
 
+  private var horizontalContentPadding: CGFloat {
+    return style == .card ? 10 : 0
+  }
+
+  private var titleLineLimit: Int {
+    return style == .card ? 3 : 1
+  }
+
+  private var minimumHeight: CGFloat {
+    return style == .card ? Popup.itemHeight : 22
+  }
+
+  @ViewBuilder
   var body: some View {
-    HStack(spacing: 0) {
+    let row = HStack(spacing: 0) {
       if showIcons, let appIcon {
         VStack {
           Spacer(minLength: 0)
           AppImageView(appImage: appIcon, size: NSSize(width: 15, height: 15))
           Spacer(minLength: 0)
         }
-        .padding(.leading, 4)
+        .padding(.leading, style == .card ? 0 : 4)
         .padding(.vertical, 5)
       }
 
       Spacer()
-        .frame(width: showIcons ? 5 : 10)
+        .frame(width: showIcons ? 5 : (style == .card ? 0 : 10))
 
       if let accessoryImage {
         Image(nsImage: accessoryImage)
@@ -74,7 +94,11 @@ struct ListItemView<Title: View, ID: Hashable>: View {
           .padding(.trailing, 5)
           .padding(.vertical, 5)
       } else {
-        ListItemTitleView(attributedTitle: attributedTitle, title: title)
+        ListItemTitleView(
+          attributedTitle: attributedTitle,
+          lineLimit: titleLineLimit,
+          title: title
+        )
           .padding(.trailing, 5)
       }
 
@@ -104,17 +128,43 @@ struct ListItemView<Title: View, ID: Hashable>: View {
           }
         }
       }
-      .padding(.trailing, 10)
+      .padding(.trailing, style == .card ? 0 : 10)
     }
-    .frame(minHeight: Popup.itemHeight)
+    .padding(.horizontal, horizontalContentPadding)
+    .padding(.vertical, style == .card ? 8 : 0)
+    .frame(minHeight: minimumHeight)
     .id(id)
     .frame(maxWidth: .infinity, alignment: .leading)
-    .foregroundStyle(isSelected ? Color.white : .primary)
-    // macOS 26 broke hovering if no background is present.
-    // The slight opcaity white background is a workaround
-    .background(isSelected ? Color.accentColor.opacity(0.8) : .white.opacity(0.001))
-    .clipShape(selectionAppearance.rect(cornerRadius: Popup.cornerRadius))
     .hoverSelectionId(selectionId)
-    .help(help ?? "")
+
+    if style == .card {
+      row
+        .foregroundStyle(Color.primary)
+        .background(
+          isSelected
+            ? Color.accentColor.opacity(0.16)
+            : Color(nsColor: .controlBackgroundColor).opacity(0.72),
+          in: RoundedRectangle(cornerRadius: Popup.cornerRadius, style: .continuous)
+        )
+        .overlay {
+          RoundedRectangle(cornerRadius: Popup.cornerRadius, style: .continuous)
+            .stroke(
+              isSelected
+                ? Color.accentColor
+                : Color(nsColor: .separatorColor).opacity(0.55),
+              lineWidth: isSelected ? 1.5 : 1
+            )
+        }
+        .contentShape(RoundedRectangle(cornerRadius: Popup.cornerRadius, style: .continuous))
+        .help(help ?? "")
+    } else {
+      row
+        .foregroundStyle(isSelected ? Color.white : .primary)
+        // macOS 26 broke hovering if no background is present.
+        // The slight opacity white background is a workaround.
+        .background(isSelected ? Color.accentColor.opacity(0.8) : .white.opacity(0.001))
+        .clipShape(selectionAppearance.rect(cornerRadius: Popup.cornerRadius))
+        .help(help ?? "")
+    }
   }
 }
