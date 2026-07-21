@@ -150,9 +150,9 @@ struct ListItemView<Title: View, ID: Hashable>: View {
           RoundedRectangle(cornerRadius: Popup.cornerRadius, style: .continuous)
             .stroke(
               isSelected
-                ? Color.accentColor
+                ? Color.clear
                 : Color(nsColor: .separatorColor).opacity(0.55),
-              lineWidth: isSelected ? 1.5 : 1
+              lineWidth: 1
             )
         }
         .contentShape(RoundedRectangle(cornerRadius: Popup.cornerRadius, style: .continuous))

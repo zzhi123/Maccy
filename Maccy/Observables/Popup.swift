@@ -17,14 +17,15 @@ enum PopupState {
 
 @Observable
 class Popup {
-  // Keep the primary clipboard surface compact and predictable. 360 points
-  // matches the reference layout (720 pixels on a 2x Retina display).
-  static let contentWidth: CGFloat = 360
+  // Keep the primary clipboard surface compact and predictable. This is 10%
+  // narrower than the previous 306-point revision.
+  static let contentWidth: CGFloat = 275.4
   static let verticalSeparatorPadding = 8.0
   static let horizontalSeparatorPadding = 0.0
   static let verticalPadding: CGFloat = 12
   static let horizontalPadding: CGFloat = 12
-  static let itemSpacing: CGFloat = 8
+  // Keep clipboard cards visually grouped in the compact popup.
+  static let itemSpacing: CGFloat = 3
   static let minimumPreviewHeight: CGFloat = 150
 
   // Radius used for items inset by the padding. Ensures they visually have the same curvature

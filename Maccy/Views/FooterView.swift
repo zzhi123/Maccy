@@ -22,13 +22,20 @@ struct FooterView: View {
     VStack(spacing: 0) {
       Divider()
         .padding(.horizontal, Popup.horizontalSeparatorPadding)
-        .padding(.bottom, Popup.verticalSeparatorPadding)
+        .padding(.bottom, 4)
 
-      ZStack {
-        FooterItemView(item: footer.items[0])
-          .opacity(clearOpacity)
-        FooterItemView(item: footer.items[1])
-          .opacity(clearAllOpacity)
+      HStack(spacing: 0) {
+        ZStack {
+          FooterItemView(item: footer.items[0])
+            .opacity(clearOpacity)
+          FooterItemView(item: footer.items[1])
+            .opacity(clearAllOpacity)
+        }
+        .frame(maxWidth: .infinity)
+
+        ForEach(footer.items.suffix(from: 2)) { item in
+          FooterItemView(item: item)
+        }
       }
       .onChange(of: modifierFlags.flags) {
         if clearAllModifiersPressed {
@@ -49,14 +56,10 @@ struct FooterView: View {
           }
         }
       }
-
-      ForEach(footer.items.suffix(from: 2)) { item in
-        FooterItemView(item: item)
-      }
     }
     .opacity(showFooter ? 1 : 0)
     .frame(maxHeight: showFooter ? nil : 0)
-    .padding(.bottom, showFooter ? Popup.verticalPadding : 0)
+    .padding(.bottom, showFooter ? 8 : 0)
     .readHeight(appState, into: \.popup.footerHeight)
   }
 }

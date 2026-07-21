@@ -5,17 +5,22 @@
 
 # [Maccy](https://maccy.app)
 
-[![Downloads](https://img.shields.io/github/downloads/p0deje/Maccy/total.svg)](https://github.com/p0deje/Maccy/releases/latest)
-[![Build Status](https://img.shields.io/bitrise/716921b669780314/master?token=3pMiCb5dpFzlO-7jTYtO3Q)](https://app.bitrise.io/app/716921b669780314)
+[![Downloads](https://img.shields.io/github/downloads/zzhi123/Maccy/total.svg)](https://github.com/zzhi123/Maccy/releases/latest)
+[![Build](https://github.com/zzhi123/Maccy/actions/workflows/build.yml/badge.svg)](https://github.com/zzhi123/Maccy/actions/workflows/build.yml)
 
 Maccy is a lightweight clipboard manager for macOS. It keeps the history of what you copy
 and lets you quickly navigate, search, and use previous clipboard contents.
 
 Maccy works on macOS Sonoma 14 or higher.
 
+> [!NOTE]
+> This fork keeps Maccy's clipboard behavior intact while providing a compact,
+> card-style native interface. See [Card-style UI in this fork](#card-style-ui-in-this-fork).
+
 <!-- vim-markdown-toc GFM -->
 
 * [Features](#features)
+* [Card-style UI in this fork](#card-style-ui-in-this-fork)
 * [Install](#install)
 * [Usage](#usage)
 * [Advanced](#advanced)
@@ -42,9 +47,29 @@ Maccy works on macOS Sonoma 14 or higher.
 * Native UI
 * Open source and free
 
+## Card-style UI in this fork
+
+![Compact card-style clipboard popup](docs/card-popup-ui.png)
+
+This fork redraws the clipboard popup without changing Maccy's clipboard,
+search, selection, paste, shortcut, confirmation, or settings logic:
+
+* A compact 275.4-point popup width.
+* Native rounded cards with 3-point spacing between clipboard entries.
+* A borderless accent fill for the selected or hovered card.
+* Clear, Preferences, About, and Quit actions integrated into one compact footer.
+* Semantic macOS colors and SF Symbols that adapt to the system appearance.
+
+中文说明：本 Fork 只调整剪贴板弹窗的 SwiftUI 展示层，采用更窄的卡片式布局、
+无描边选中状态和一体化底部图标栏；剪贴板、搜索、粘贴及快捷键等核心逻辑保持不变。
+
 ## Install
 
-Download the latest version from the [releases](https://github.com/p0deje/Maccy/releases/latest) page, or use [Homebrew](https://brew.sh/):
+Download the customized build from this fork's
+[releases](https://github.com/zzhi123/Maccy/releases/latest) page.
+
+The following Homebrew command installs the original upstream Maccy release,
+without this fork's card-style interface:
 
 ```sh
 brew install maccy
