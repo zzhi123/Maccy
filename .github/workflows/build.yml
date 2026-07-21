@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Select stable Xcode
         run: sudo xcode-select --switch /Applications/Xcode_26.4.app
@@ -42,11 +42,17 @@ jobs:
           -derivedDataPath build
           CODE_SIGNING_ALLOWED=NO
 
+      - name: Ad-hoc sign release app
+        run: codesign --force --deep --sign - --timestamp=none build/Build/Products/Release/Maccy.app
+
+      - name: Verify app signature
+        run: codesign --verify --deep --strict --verbose=2 build/Build/Products/Release/Maccy.app
+
       - name: Package app
         run: ditto -c -k --sequesterRsrc --keepParent build/Build/Products/Release/Maccy.app Maccy-2.6.2.zip
 
       - name: Upload app artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Maccy-2.6.2
           path: Maccy-2.6.2.zip
