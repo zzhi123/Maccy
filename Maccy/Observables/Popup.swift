@@ -17,25 +17,22 @@ enum PopupState {
 
 @Observable
 class Popup {
-  static let verticalSeparatorPadding = 6.0
-  static let horizontalSeparatorPadding = 6.0
-  static let verticalPadding: CGFloat = 5
-  static let horizontalPadding: CGFloat = 5
+  // Keep the primary clipboard surface compact and predictable. 360 points
+  // matches the reference layout (720 pixels on a 2x Retina display).
+  static let contentWidth: CGFloat = 360
+  static let verticalSeparatorPadding = 8.0
+  static let horizontalSeparatorPadding = 0.0
+  static let verticalPadding: CGFloat = 12
+  static let horizontalPadding: CGFloat = 12
+  static let itemSpacing: CGFloat = 8
   static let minimumPreviewHeight: CGFloat = 150
 
   // Radius used for items inset by the padding. Ensures they visually have the same curvature
   // as the menu.
-  static let cornerRadius: CGFloat = if #available(macOS 26.0, *) {
-    7
-  } else {
-    4
-  }
+  static let cornerRadius: CGFloat = 8
+  static let panelCornerRadius: CGFloat = 12
 
-  static let itemHeight: CGFloat = if #available(macOS 26.0, *) {
-    24
-  } else {
-    22
-  }
+  static let itemHeight: CGFloat = 60
 
   var needsResize = false
   var height: CGFloat = 0

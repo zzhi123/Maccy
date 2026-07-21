@@ -9,14 +9,17 @@ struct SearchFieldView: View {
   var body: some View {
     ZStack {
       RoundedRectangle(cornerRadius: Popup.cornerRadius, style: .continuous)
-        .fill(Color.secondary)
-        .opacity(0.1)
-        .frame(height: 23)
+        .fill(Color(nsColor: .controlBackgroundColor).opacity(0.72))
+        .overlay {
+          RoundedRectangle(cornerRadius: Popup.cornerRadius, style: .continuous)
+            .stroke(Color(nsColor: .separatorColor).opacity(0.55), lineWidth: 1)
+        }
+        .frame(height: 34)
 
       HStack {
         Image(systemName: "magnifyingglass")
           .frame(width: 11, height: 11)
-          .padding(.leading, 5)
+          .padding(.leading, 9)
           .opacity(0.8)
 
         TextField(placeholder, text: $query)
@@ -33,7 +36,7 @@ struct SearchFieldView: View {
           } label: {
             Image(systemName: "xmark.circle.fill")
               .frame(width: 11, height: 11)
-              .padding(.trailing, 5)
+              .padding(.trailing, 9)
           }
           .buttonStyle(.plain)
           .opacity(0.9)

@@ -47,7 +47,7 @@ class AppState: Sendable {
       onSlideoutResize: { previewWidth in
         Defaults[.previewWidth] = previewWidth
       })
-    preview.contentWidth = Defaults[.windowSize].width
+    preview.contentWidth = Popup.contentWidth
     preview.slideoutWidth = Defaults[.previewWidth]
   }
 

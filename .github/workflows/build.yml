@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Select stable Xcode
+        run: sudo xcode-select --switch /Applications/Xcode_26.4.app
+
+      - name: Resolve Swift packages
+        run: xcodebuild -resolvePackageDependencies -project Maccy.xcodeproj -scheme Maccy
+
+      - name: Run unit tests
+        run: >-
+          xcodebuild test
+          -project Maccy.xcodeproj
+          -scheme Maccy
+          -testPlan Maccy
+          -destination 'platform=macOS'
+          -only-testing:MaccyTests
+          CODE_SIGNING_ALLOWED=NO
+
+      - name: Build release app
+        run: >-
+          xcodebuild build
+          -project Maccy.xcodeproj
+          -scheme Maccy
+          -configuration Release
+          -derivedDataPath build
+          CODE_SIGNING_ALLOWED=NO
+
+      - name: Package app
+        run: ditto -c -k --sequesterRsrc --keepParent build/Build/Products/Release/Maccy.app Maccy-2.6.2.zip
+
+      - name: Upload app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Maccy-2.6.2
+          path: Maccy-2.6.2.zip
+          if-no-files-found: error

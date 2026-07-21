@@ -92,6 +92,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     migrateUserDefaults()
     disableUnusedGlobalHotkeys()
 
+    // The redesigned history surface has a fixed primary-column width. Keep
+    // the saved height, while migrating existing wider Maccy installations.
+    Defaults[.windowSize].width = Popup.contentWidth
+
     panel = FloatingPanel(
       contentRect: NSRect(origin: .zero, size: Defaults[.windowSize]),
       identifier: Bundle.main.bundleIdentifier ?? "org.p0deje.Maccy",

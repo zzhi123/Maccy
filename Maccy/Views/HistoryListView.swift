@@ -96,7 +96,7 @@ struct HistoryListView: View {
 
     ScrollView {
       ScrollViewReader { proxy in
-        MultipleSelectionListView(items: unpinnedItems) { previous, item, next, index in
+        MultipleSelectionListView(items: unpinnedItems, spacing: Popup.itemSpacing) { previous, item, next, index in
           HistoryItemView(item: item, previous: previous, next: next, index: index)
         }
         .padding(.top, scrollTopPadding)
